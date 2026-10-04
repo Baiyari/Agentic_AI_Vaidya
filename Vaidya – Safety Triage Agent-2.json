@@ -1,0 +1,104 @@
+{
+  "name": "Vaidya – Safety Triage Agent-2",
+  "nodes": [
+    {
+      "parameters": {
+        "endpointUrl": "http://mcp-server:8000/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "check_severity",
+          "mode": "list",
+          "cachedResultName": "check_severity"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "age": "={{ ($json.age) }}",
+            "duration_days": "={{ $json.duration_days }}",
+            "symptoms": "={{ $json.symptoms }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "symptoms",
+              "displayName": "symptoms",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "array",
+              "defaultValue": "[\n  \"string\"\n]",
+              "removed": false
+            },
+            {
+              "id": "age",
+              "displayName": "age",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "duration_days",
+              "displayName": "duration_days",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -208
+      ],
+      "id": "53e21dfb-827c-42f2-acc7-3818f4356aeb",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -208
+      ],
+      "id": "857b18b9-ef40-4b51-b83e-12292388a3f7",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "MCP Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "dc6f1391-b4c7-4c00-8abc-284ca152a607",
+  "meta": {
+    "instanceId": "050eb919a4abe1da2c8d5ad47590fda2a6477386c92111823cf3a4dd84d9ed77"
+  },
+  "id": "8pvGeSeRzAIpFfky",
+  "tags": []
+}

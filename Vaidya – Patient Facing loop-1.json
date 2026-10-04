@@ -1,0 +1,202 @@
+{
+  "name": "Vaidya – Patient Facing loop-1",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "d6f9dba6-0d29-4f8c-8731-6a0dbf431901",
+      "name": "When chat message received",
+      "webhookId": "ae943596-e857-4724-9784-b72cbd8a7cdd"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5000/api/cases",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ text: $('When chat message received').item.json.chatInput }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "0f10c4bd-9a4d-4b48-9548-684c3259aa58",
+      "name": "Vaidya Clinical Engine"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are Vaidya's AI Reception Agent.\n\nYou are the patient's first point of contact.\n\nYour responsibilities are:\n1. Understand what the patient is trying to communicate.\n2. Ask concise follow-up questions when important information is missing.\n3. Collect relevant basic information such as symptoms, duration, age, and important context.\n4. Maintain a natural and empathetic conversation.\n5. Do NOT diagnose the patient.\n6. Do NOT override Vaidya's clinical safety or triage decisions.\n7. Do NOT tell the patient that a specific disease is confirmed.\n8. When enough information has been collected, pass the patient's message to the Vaidya Clinical Engine.\n\nThe Vaidya Clinical Engine is responsible for:\n- deterministic safety triage\n- emergency escalation\n- specialty routing\n- specialist reasoning\n- evidence retrieval\n- explainability\n- final clinical assessment\n\nIf the patient describes a possible emergency, do not attempt to diagnose it. Tell the patient that the situation may require urgent medical attention and that the clinical engine will assess it.\n\nAlways prioritize patient safety."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        -48
+      ],
+      "id": "c6b1a0bf-6f3e-4d54-bb8b-719e8b1027b5",
+      "name": "Reception Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        176
+      ],
+      "id": "6c1336b0-3031-4add-959f-a27bdfb69363",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NX19Fh2cKlta5pRU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "8pvGeSeRzAIpFfky",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/8pvGeSeRzAIpFfky",
+          "cachedResultName": "Vaidya – Safety Triage Agent-2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "specialist",
+              "displayName": "specialist",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        -48
+      ],
+      "id": "69e19a92-a5ce-491d-8ba6-c8934ed06d3a",
+      "name": "Call 'Vaidya – Safety Triage Agent-2'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Reception Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reception Agent": {
+      "main": [
+        [
+          {
+            "node": "Vaidya Clinical Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reception Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vaidya Clinical Engine": {
+      "main": [
+        [
+          {
+            "node": "Call 'Vaidya – Safety Triage Agent-2'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "60547a4b-a663-44ee-96c3-65ea75f5074c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "050eb919a4abe1da2c8d5ad47590fda2a6477386c92111823cf3a4dd84d9ed77"
+  },
+  "id": "qaSiemBVupsrN4IO",
+  "tags": []
+}
