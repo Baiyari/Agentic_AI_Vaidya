@@ -9,5 +9,6 @@ __pycache__/
 .gitignore
 .env
 *.db
+synthea_sample_data_csv_apr2020.zip
 .agents/
 .gemini/
