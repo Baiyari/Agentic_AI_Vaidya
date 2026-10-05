@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block page_title %}Synthea EHR Synthetic Cohort{% endblock %}
+{% block page_subtitle %}Live synthetic patient demographic registry imported from Synthea EHR dataset{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Search Box -->
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <form method="GET" action="{{ url_for('dashboard.patient_list') }}" class="flex-1 max-w-md flex items-center space-x-2">
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" name="search" value="{{ search }}" placeholder="Search by name, ID, or city..."
+                    class="w-full pl-8 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            </div>
+            <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg transition-colors">
+                Search
+            </button>
+            {% if search %}
+            <a href="{{ url_for('dashboard.patient_list') }}" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors">
+                Reset
+            </a>
+            {% endif %}
+        </form>
+        <div class="text-xs text-slate-500 font-medium">
+            <span>Total Patients: <b>{{ total }}</b></span>
+        </div>
+    </div>
+
+    <!-- Patients Table -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 uppercase font-semibold border-b border-slate-200">
+                    <tr>
+                        <th class="px-6 py-3">Patient Name</th>
+                        <th class="px-6 py-3">Synthea EHR Identifier</th>
+                        <th class="px-6 py-3">Demographics</th>
+                        <th class="px-6 py-3">Location</th>
+                        <th class="px-6 py-3">Diagnosed Conditions</th>
+                        <th class="px-6 py-3 text-right">Triage Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for p in patients %}
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="px-6 py-4 font-bold text-slate-900 flex items-center space-x-2">
+                            <div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-normal text-xs">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <span>{{ p.full_name }}</span>
+                        </td>
+                        <td class="px-6 py-4 font-mono text-[11px] text-slate-500">
+                            {{ p.id }}
+                        </td>
+                        <td class="px-6 py-4 text-slate-700">
+                            <span class="capitalize">{{ p.gender or 'Unknown' }}</span> • Born {{ p.birthdate or 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 text-slate-700">
+                            {{ p.city or 'N/A' }}, {{ p.state or 'MA' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                {{ p.conditions|length }} Records
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{{ url_for('dashboard.intake', patient_id=p.id) }}"
+                                class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-xs transition-colors">
+                                <i class="fa-solid fa-file-medical mr-1.5"></i> Initiate Triage
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-slate-400">
+                            No patients found matching query.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if total_pages > 1 %}
+        <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs text-slate-500">Page {{ page }} of {{ total_pages }}</span>
+            <div class="flex items-center space-x-2">
+                {% if page > 1 %}
+                <a href="{{ url_for('dashboard.patient_list', page=page-1, search=search) }}" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-semibold text-slate-700">Previous</a>
+                {% endif %}
+                {% if page < total_pages %}
+                <a href="{{ url_for('dashboard.patient_list', page=page+1, search=search) }}" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-semibold text-slate-700">Next</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

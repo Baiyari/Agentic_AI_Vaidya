@@ -1,0 +1,522 @@
+{
+  "chest_pain": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "high"
+  },
+  "palpitations": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "irregular_heartbeat": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "high_blood_pressure": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "hypertension": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "swollen_ankles": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "peripheral_edema": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "syncope": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "high"
+  },
+  "fainting": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "moderate"
+  },
+  "shortness_of_breath_on_exertion": {
+    "category": "Diseases of the circulatory system",
+    "specialist": "Cardiologist",
+    "urgency": "high"
+  },
+  "shortness_of_breath": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "high"
+  },
+  "difficulty_breathing": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "high"
+  },
+  "wheezing": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "moderate"
+  },
+  "chronic_cough": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "low"
+  },
+  "cough": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "productive_cough": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "moderate"
+  },
+  "coughing_blood": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "emergency"
+  },
+  "hemoptysis": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "emergency"
+  },
+  "chest_tightness": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "moderate"
+  },
+  "sinus_congestion": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "nasal_congestion": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "runny_nose": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "sore_throat": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "hoarseness": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Otolaryngologist",
+    "urgency": "low"
+  },
+  "stridor": {
+    "category": "Diseases of the respiratory system",
+    "specialist": "Pulmonologist",
+    "urgency": "emergency"
+  },
+  "sudden_severe_headache": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "headache": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "low"
+  },
+  "migraine": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "dizziness": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "vertigo": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "slurred_speech": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "facial_drooping": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "vision_loss": {
+    "category": "Diseases of the eye and adnexa",
+    "specialist": "Ophthalmologist",
+    "urgency": "emergency"
+  },
+  "double_vision": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "high"
+  },
+  "seizures": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "tremor": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "low"
+  },
+  "memory_loss": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "confusion": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "high"
+  },
+  "numbness": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "tingling": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "low"
+  },
+  "weakness_one_side": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "sudden_numbness": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "emergency"
+  },
+  "loss_of_balance": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "moderate"
+  },
+  "stiff_neck": {
+    "category": "Diseases of the nervous system",
+    "specialist": "Neurologist",
+    "urgency": "high"
+  },
+  "nausea": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "vomiting": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "moderate"
+  },
+  "abdominal_pain": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "moderate"
+  },
+  "stomach_cramps": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "diarrhea": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "constipation": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "heartburn": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "acid_reflux": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "bloating": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "low"
+  },
+  "blood_in_stool": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "high"
+  },
+  "melena": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "high"
+  },
+  "rectal_bleeding": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "high"
+  },
+  "jaundice": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "high"
+  },
+  "yellowing_eyes": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "high"
+  },
+  "difficulty_swallowing": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "moderate"
+  },
+  "dysphagia": {
+    "category": "Diseases of the digestive system",
+    "specialist": "Gastroenterologist",
+    "urgency": "moderate"
+  },
+  "loss_of_appetite": {
+    "category": "Diseases of the digestive system",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "skin_rash": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "itching": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "pruritus": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "hives": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "moderate"
+  },
+  "urticaria": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "moderate"
+  },
+  "swelling_face": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Allergist / Immunologist",
+    "urgency": "emergency"
+  },
+  "facial_swelling": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Allergist / Immunologist",
+    "urgency": "emergency"
+  },
+  "eczema": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "psoriasis": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "acne": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "skin_lesion": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "moderate"
+  },
+  "mole_changes": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "moderate"
+  },
+  "blistering": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "moderate"
+  },
+  "dry_skin": {
+    "category": "Diseases of the skin and subcutaneous tissue",
+    "specialist": "Dermatologist",
+    "urgency": "low"
+  },
+  "fever": {
+    "category": "Certain infectious or parasitic diseases",
+    "specialist": "General Practitioner",
+    "urgency": "moderate"
+  },
+  "chills": {
+    "category": "Certain infectious or parasitic diseases",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "night_sweats": {
+    "category": "Certain infectious or parasitic diseases",
+    "specialist": "General Practitioner",
+    "urgency": "moderate"
+  },
+  "fatigue": {
+    "category": "General symptoms and signs",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "malaise": {
+    "category": "General symptoms and signs",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "generalized_weakness": {
+    "category": "General symptoms and signs",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "unexplained_weight_loss": {
+    "category": "General symptoms and signs",
+    "specialist": "General Practitioner",
+    "urgency": "moderate"
+  },
+  "body_aches": {
+    "category": "General symptoms and signs",
+    "specialist": "General Practitioner",
+    "urgency": "low"
+  },
+  "swollen_lymph_nodes": {
+    "category": "Certain infectious or parasitic diseases",
+    "specialist": "General Practitioner",
+    "urgency": "moderate"
+  },
+  "dehydration": {
+    "category": "Endocrine, nutritional and metabolic diseases",
+    "specialist": "General Practitioner",
+    "urgency": "moderate"
+  },
+  "joint_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Rheumatologist",
+    "urgency": "low"
+  },
+  "multiple_joint_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Rheumatologist",
+    "urgency": "moderate"
+  },
+  "morning_stiffness": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Rheumatologist",
+    "urgency": "low"
+  },
+  "back_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "knee_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "shoulder_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "neck_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "ankle_sprain": {
+    "category": "Injury, poisoning or certain other consequences of external causes",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "wrist_pain": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Orthopedist",
+    "urgency": "low"
+  },
+  "joint_swelling": {
+    "category": "Diseases of the musculoskeletal system and connective tissue",
+    "specialist": "Rheumatologist",
+    "urgency": "moderate"
+  },
+  "severe_bleeding": {
+    "category": "Injury, poisoning or certain other consequences of external causes",
+    "specialist": "Emergency Medicine",
+    "urgency": "emergency"
+  },
+  "eye_pain": {
+    "category": "Diseases of the eye and adnexa",
+    "specialist": "Ophthalmologist",
+    "urgency": "high"
+  },
+  "blurred_vision": {
+    "category": "Diseases of the eye and adnexa",
+    "specialist": "Ophthalmologist",
+    "urgency": "moderate"
+  },
+  "eye_redness": {
+    "category": "Diseases of the eye and adnexa",
+    "specialist": "Ophthalmologist",
+    "urgency": "low"
+  },
+  "ear_pain": {
+    "category": "Diseases of the ear and mastoid process",
+    "specialist": "Otolaryngologist",
+    "urgency": "low"
+  },
+  "hearing_loss": {
+    "category": "Diseases of the ear and mastoid process",
+    "specialist": "Otolaryngologist",
+    "urgency": "moderate"
+  },
+  "frequent_urination": {
+    "category": "Diseases of the genitourinary system",
+    "specialist": "Urologist",
+    "urgency": "low"
+  },
+  "painful_urination": {
+    "category": "Diseases of the genitourinary system",
+    "specialist": "Urologist",
+    "urgency": "moderate"
+  },
+  "blood_in_urine": {
+    "category": "Diseases of the genitourinary system",
+    "specialist": "Urologist",
+    "urgency": "high"
+  }
+}

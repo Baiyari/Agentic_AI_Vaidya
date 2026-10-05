@@ -1,0 +1,1141 @@
+{
+  "name": "Vaidya",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        64,
+        544
+      ],
+      "id": "d6f9dba6-0d29-4f8c-8731-6a0dbf431901",
+      "name": "When chat message received",
+      "webhookId": "ae943596-e857-4724-9784-b72cbd8a7cdd"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5000/api/cases",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({\n  text: $('When chat message received').item.json.chatInput,\n  patient_id: \"demo-patient-1\"\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        640,
+        544
+      ],
+      "id": "0f10c4bd-9a4d-4b48-9548-684c3259aa58",
+      "name": "Vaidya Clinical Engine"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the Intake Agent for Vaidya, a clinical triage system.\n\nYour job is to extract structured clinical information from the patient's\nmessage so that the downstream Vaidya Clinical Engine can perform triage.\n\nExtract:\n\n- age\n- symptoms\n- duration of symptoms\n- important associated symptoms\n- relevant medical history if explicitly provided\n\nNormalize symptoms into simple clinical terms.\n\nExamples:\n\"chest pain\" → chest_pain\n\"shortness of breath\" → shortness_of_breath\n\"dry cough\" → cough\n\"headache\" → headache\n\"stomach pain\" → abdominal_pain\n\"skin rash\" → rash\n\nIMPORTANT:\nDo NOT conduct a conversational interview.\nDo NOT ask follow-up questions.\nDo NOT respond to the patient with questions.\nDo NOT provide a diagnosis or medical advice.\n\nIf information is missing, use null or an empty value rather than asking\nthe patient for more information.\n\nReturn ONLY the extracted information in a structured format."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        544
+      ],
+      "id": "c6b1a0bf-6f3e-4d54-bb8b-719e8b1027b5",
+      "name": "Reception Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2056,
+        176
+      ],
+      "id": "6c1336b0-3031-4add-959f-a27bdfb69363",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NX19Fh2cKlta5pRU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "8pvGeSeRzAIpFfky",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/8pvGeSeRzAIpFfky",
+          "cachedResultName": "Vaidya – Safety Triage Agent-2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "specialist",
+              "displayName": "specialist",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        864,
+        544
+      ],
+      "id": "69e19a92-a5ce-491d-8ba6-c8934ed06d3a",
+      "name": "Call 'Vaidya – Safety Triage Agent-2'"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://mcp-server:8000/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "suggest_specialist",
+          "mode": "list",
+          "cachedResultName": "suggest_specialist"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "symptoms": "={{ $('Vaidya Clinical Engine').item.json.symptoms }}"
+          },
+          "matchingColumns": [
+            "symptoms"
+          ],
+          "schema": [
+            {
+              "id": "symptoms",
+              "displayName": "symptoms",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "array",
+              "defaultValue": "[\n  \"string\"\n]",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        544
+      ],
+      "id": "a52d7e7d-a395-4548-b228-d14f080aa293",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.item.json;\n\n// MCP Client returns the specialist inside content[0].text\nlet raw = \"\";\n\nif (input.content?.[0]?.text) {\n  raw = input.content[0].text.trim();\n} else if (input.result) {\n  raw = String(input.result).trim();\n} else if (input.specialist) {\n  raw = String(input.specialist).trim();\n}\n\n// Convert MCP specialist names to your canonical names\nconst CANONICAL = {\n  \"Cardiologist\": \"Cardiology\",\n  \"Cardiology\": \"Cardiology\",\n\n  \"Pulmonologist\": \"Pulmonology\",\n  \"Pulmonology\": \"Pulmonology\",\n\n  \"Neurologist\": \"Neurology\",\n  \"Neurology\": \"Neurology\",\n\n  \"Gastroenterologist\": \"Gastroenterology\",\n  \"Gastroenterology\": \"Gastroenterology\",\n\n  \"Dermatologist\": \"Dermatology\",\n  \"Dermatology\": \"Dermatology\",\n\n  \"General Practitioner\": \"General Medicine\",\n  \"General Medicine\": \"General Medicine\"\n};\n\nconst canonical = CANONICAL[raw] || \"General Medicine\";\n\nreturn {\n  json: {\n    ...input,\n    specialist_raw: raw,\n    specialist: canonical\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        640
+      ],
+      "id": "e70b9422-d2ec-4789-992f-0b62f8d030dc",
+      "name": "Parse Specialty Router"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.specialist }}",
+                    "rightValue": "Cardiology",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a598f6cc-4cf5-44c8-acc5-e70d0e4742ab"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cardiology"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8c0a995a-8d14-456d-b959-4e7fbe5be5f6",
+                    "leftValue": "{{ $json.specialist }}",
+                    "rightValue": "Pulmonology",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pulmonology"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a41808f1-5a29-446e-8e5a-938e949e57c8",
+                    "leftValue": "={{ $json.specialist }}",
+                    "rightValue": "Neurology",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Neurology"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "658b40f9-9a51-4ab7-9a8b-dede0cccc131",
+                    "leftValue": "={{ $json.specialist }}",
+                    "rightValue": "Gastroenterology",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Gastroenterology"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "63952341-be3a-44f3-8423-564a8a6f3cad",
+                    "leftValue": "={{ $json.specialist }}",
+                    "rightValue": "Dermatology",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Dermatology"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c55e4f54-31e8-42cf-a8f5-8e1124cbd558",
+                    "leftValue": "={{ $json.specialist }}",
+                    "rightValue": "General Medicine",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "General Medicine"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        576
+      ],
+      "id": "dd92bfc3-1af3-4ba7-9027-b8fbebd8427b",
+      "name": "Specialty Router"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a cardiology-focused clinical assessment.\n\nPatient symptoms: {{ $json.symptoms }}\nAge: {{ $json.age }}\nDuration: {{ $json.duration_days }} days\nSeverity: {{ $json.severity }}\nTriage score: {{ $json.score }}\nAssess the following patient from a cardiology perspective.\n\nPatient Information:\nSymptoms: {{ $json.symptoms }}\nAge: {{ $json.age }}\nDuration: {{ $json.duration_days }} days\nSeverity: {{ $json.severity }}\nTriage Score: {{ $json.score }}\nTriage Reason: {{ $json.reason }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nDo not provide a definitive diagnosis.",
+        "options": {
+          "systemMessage": "You are the Vaidya Cardiology Specialist Agent.\n\nYou provide focused clinical decision support for cardiovascular complaints.\n\nAnalyze the patient's symptoms, age, duration, safety-triage result, triage score, and available clinical context.\n\nFocus on chest pain, chest pressure, palpitations, shortness of breath, dizziness, syncope, edema, and cardiovascular risk factors.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\nIf the information suggests an emergency, clearly state that immediate medical evaluation is required.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        1120
+      ],
+      "id": "d024b4da-e5ce-4dae-ba6a-a3a3ac5e8ea2",
+      "name": "Cardiology Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a pulmonology-focused clinical assessment.\n\nPatient Information:\n\nSymptoms: {{ $('Vaidya Clinical Engine').item.json.symptoms }}\n\nAge: {{ $('Vaidya Clinical Engine').item.json.age }}\n\nDuration: {{ $('Vaidya Clinical Engine').item.json.duration_days }} days\n\nSeverity: {{ $('Vaidya Clinical Engine').item.json.severity }}\n\nTriage Score: {{ $('Vaidya Clinical Engine').item.json.score }}\n\nTriage Reason: {{ $('Vaidya Clinical Engine').item.json.reason }}\n\nRecommended Specialist: {{ $('Vaidya Clinical Engine').item.json.specialist }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nUse the patient information provided above to produce the assessment.\n\nDo not ask for additional information.\nDo not provide a definitive diagnosis.\nDo not override the deterministic safety classification.",
+        "options": {
+          "systemMessage": "You are the Vaidya Pulmonology Specialist Agent.\n\nYou provide focused clinical decision support for respiratory and pulmonary complaints.\n\nAnalyze the patient's symptoms, age, duration, deterministic safety classification, triage score, triage reason, and available clinical context.\n\nFocus on respiratory complaints including cough, wheezing, shortness of breath, chest tightness, breathing difficulty, sputum production, respiratory infections, allergic respiratory symptoms, and relevant pulmonary risk factors.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\n\nIf the deterministic safety classification indicates an emergency, clearly state that immediate medical evaluation is required and preserve the emergency classification.\n\nUse the clinical information provided in the User Message.\nDo not ask the patient for information that has already been provided.\nDo not return a request for additional patient information when the provided information is sufficient for a focused assessment.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nProvide 3–5 concise key evidence terms suitable for a PubMed literature search.\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        -48
+      ],
+      "id": "b989a139-a9ff-45a1-b972-f26f25a7f53f",
+      "name": "Pulmonology Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a neurology-focused clinical assessment.\n\nPatient Information:\nSymptoms: {{ $json.symptoms }}\nAge: {{ $json.age }}\nDuration: {{ $json.duration_days }} days\nSeverity: {{ $json.severity }}\nTriage Score: {{ $json.score }}\nTriage Reason: {{ $json.reason }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nDo not provide a definitive diagnosis.",
+        "options": {
+          "systemMessage": "You are the Vaidya Neurology Specialist Agent.\n\nYou provide focused clinical decision support for neurological complaints.\n\nAnalyze the patient's symptoms, age, duration, safety-triage result, triage score, and available clinical context.\n\nFocus on headache, dizziness, weakness, numbness, sensory changes, seizures, altered consciousness, speech changes, coordination problems, syncope, and relevant neurological risk factors.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\nIf the information suggests an emergency, clearly state that immediate medical evaluation is required.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        736
+      ],
+      "id": "94bbc6ad-4eae-4950-ba8e-20fa24dbb9b2",
+      "name": "Neurology Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a gastroenterology-focused clinical assessment.\n\nPatient Information:\n\nSymptoms: {{ $('Vaidya Clinical Engine').item.json.symptoms }}\n\nAge: {{ $('Vaidya Clinical Engine').item.json.age }}\n\nDuration: {{ $('Vaidya Clinical Engine').item.json.duration_days }} days\n\nSeverity: {{ $('Vaidya Clinical Engine').item.json.severity }}\n\nTriage Score: {{ $('Vaidya Clinical Engine').item.json.score }}\n\nTriage Reason: {{ $('Vaidya Clinical Engine').item.json.reason }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nUse the patient information provided above. Do not ask the user for additional information.\nDo not provide a definitive diagnosis.",
+        "options": {
+          "systemMessage": "You are the Vaidya Gastroenterology Specialist Agent.\n\nYou provide focused clinical decision support for gastrointestinal complaints.\n\nAnalyze the patient's symptoms, age, duration, safety-triage result, triage score, and available clinical context.\n\nFocus on abdominal pain, nausea, vomiting, diarrhea, constipation, gastrointestinal bleeding, appetite changes, weight changes, digestive symptoms, and relevant gastrointestinal risk factors.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\nIf the information suggests an emergency, clearly state that immediate medical evaluation is required.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        928
+      ],
+      "id": "5b3ae224-a6fb-4f87-9d52-df48e2e179cc",
+      "name": "Gastroenterology Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a general-medicine-focused clinical assessment.\n\nPatient Information:\n\nSymptoms: {{ $('Vaidya Clinical Engine').item.json.symptoms }}\n\nAge: {{ $('Vaidya Clinical Engine').item.json.age }}\n\nDuration: {{ $('Vaidya Clinical Engine').item.json.duration_days }} days\n\nSeverity: {{ $('Vaidya Clinical Engine').item.json.severity }}\n\nTriage Score: {{ $('Vaidya Clinical Engine').item.json.score }}\n\nTriage Reason: {{ $('Vaidya Clinical Engine').item.json.reason }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nUse the patient information provided above.\nDo not ask the user for additional information.\nDo not provide a definitive diagnosis.",
+        "options": {
+          "systemMessage": "You are the Vaidya General Medicine Specialist Agent.\n\nYou provide focused clinical decision support for general medical complaints.\n\nAnalyze the patient's symptoms, age, duration, safety-triage result, triage score, and triage reason provided in the patient information.\n\nFocus on general medical complaints including fever, fatigue, weakness, body aches, mild infections, constitutional symptoms, and other conditions that do not require a specific specialist.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\nIf the information suggests an emergency, clearly state that immediate medical evaluation is required.\n\nUse only the information provided in the patient information.\nDo not ask the patient for additional information.\nProvide a useful clinical assessment even when the available information is limited.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        544
+      ],
+      "id": "c0517ff8-0b9f-4fda-9e9a-044a5d8200b6",
+      "name": "General Medicine Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Review the following patient information and provide a dermatology-focused clinical assessment.\n\nPatient Information:\n\nSymptoms: {{ $('Vaidya Clinical Engine').item.json.symptoms }}\n\nAge: {{ $('Vaidya Clinical Engine').item.json.age }}\n\nDuration: {{ $('Vaidya Clinical Engine').item.json.duration_days }} days\n\nSeverity: {{ $('Vaidya Clinical Engine').item.json.severity }}\n\nTriage Score: {{ $('Vaidya Clinical Engine').item.json.score }}\n\nTriage Reason: {{ $('Vaidya Clinical Engine').item.json.reason }}\n\nProvide:\n1. Primary clinical impression\n2. Differential diagnoses\n3. Clinical reasoning\n4. Urgency assessment\n5. Recommended next actions\n6. 3–5 key evidence terms for literature search\n\nUse the patient information provided above. Do not ask the user for additional information.\nDo not provide a definitive diagnosis.",
+        "options": {
+          "systemMessage": "You are the Vaidya Dermatology Specialist Agent.\n\nYou provide focused clinical decision support for dermatological complaints.\n\nAnalyze the patient's symptoms, age, duration, safety-triage result, triage score, and available clinical context.\n\nFocus on rashes, itching, skin lesions, redness, swelling, pigmentation changes, skin irritation, distribution of skin symptoms, and relevant dermatological risk factors.\n\nNever make a definitive diagnosis.\nNever override or downgrade the deterministic safety classification.\nDo not invent symptoms, medical history, examination findings, test results, medications, or laboratory values.\nIf the information suggests an emergency, clearly state that immediate medical evaluation is required.\n\nYour response must contain:\n- Primary Clinical Impression\n- Differential Diagnoses\n- Clinical Reasoning\n- Urgency Assessment\n- Recommended Next Actions\n- Key Evidence Terms\n\nKeep the response concise, structured, and suitable for clinician review."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        352
+      ],
+      "id": "43a76a25-8e55-46b8-b839-032dcd025268",
+      "name": "Dermatology Agent"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2336,
+        672
+      ],
+      "id": "8cbcd1d3-0df5-408e-8c38-cc26139806e8",
+      "name": "Merge Specialist Results"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analyze the following Vaidya specialist assessment and prepare evidence-search queries.\n\nPatient symptoms:\n{{ $json.symptoms }}\n\nAge:\n{{ $json.age }}\n\nDuration:\n{{ $json.duration_days }} days\n\nSeverity:\n{{ $json.severity }}\n\nTriage score:\n{{ $json.score }}\n\nSpecialist:\n{{ $json.specialist }}\n\nClinical Assessment:\n{{ JSON.stringify($json) }}\n\nGenerate 2–4 focused PubMed search queries covering:\n1. The main clinical presentation\n2. Important differential diagnoses\n3. Relevant clinical management\n4. Important safety or urgency considerations\n\nReturn the queries along with the clinical concepts they address.\n\nDo not invent citations or medical evidence.",
+        "options": {
+          "systemMessage": "You are the Vaidya Evidence Agent.\n\nYour role is to analyze the specialist clinical assessment and identify medical evidence that should support it.\n\nReview:\n- Patient symptoms\n- Age\n- Duration\n- Severity\n- Triage score\n- Recommended specialist\n- Primary clinical impression\n- Differential diagnoses\n- Clinical reasoning\n- Recommended actions\n- Key evidence terms\n\nGenerate focused medical literature search queries for PubMed.\n\nDo not invent citations, studies, authors, journals, or findings.\n\nThe evidence search should support the specialist assessment and must not create a new diagnosis.\n\nReturn:\n1. Evidence Search Queries\n2. Key Clinical Concepts\n3. Evidence Questions\n\nKeep the output concise and suitable for downstream PubMed retrieval."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2560,
+        736
+      ],
+      "id": "8b19411e-5c80-45ac-afe7-23012c00a260",
+      "name": "Evidence Agent"
+    },
+    {
+      "parameters": {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "db",
+              "value": "pubmed"
+            },
+            {
+              "name": "term",
+              "value": "={{ $json.key_evidence_terms?.join(' OR ') || $json.primary_impression || 'clinical symptoms' }}"
+            },
+            {
+              "name": "retmode",
+              "value": "json"
+            },
+            {
+              "name": "retmax",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2912,
+        736
+      ],
+      "id": "265ab533-b18c-4bda-b495-25bdd3d43e61",
+      "name": "PubMed Search"
+    },
+    {
+      "parameters": {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "db",
+              "value": "pubmed"
+            },
+            {
+              "name": "id",
+              "value": "={{ $json.esearchresult.idlist.join(',') }}"
+            },
+            {
+              "name": "retmode",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3136,
+        736
+      ],
+      "id": "de5ed2e2-be71-4420-94eb-3098011b27ee",
+      "name": "PubMed Evidence Summary"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ `\nGenerate a personalized Vaidya clinical assessment.\n\nPATIENT COMPLAINT:\n${$('When chat message received').first().json.chatInput || 'Not provided'}\n\nPATIENT DATA:\n${JSON.stringify({\n  symptoms: $('Vaidya Clinical Engine').first().json.symptoms,\n  age: $('Vaidya Clinical Engine').first().json.age,\n  duration_days: $('Vaidya Clinical Engine').first().json.duration_days\n}, null, 2)}\n\nDETERMINISTIC TRIAGE:\n${JSON.stringify({\n  severity: $('Vaidya Clinical Engine').first().json.severity,\n  score: $('Vaidya Clinical Engine').first().json.score,\n  reason: $('Vaidya Clinical Engine').first().json.reason,\n  specialist: $('Vaidya Clinical Engine').first().json.specialist\n}, null, 2)}\n\nSPECIALIST ASSESSMENT:\n${JSON.stringify($('Merge Specialist Results').first().json, null, 2)}\n\nRETRIEVED EVIDENCE:\n${JSON.stringify($('PubMed Evidence Summary').first().json, null, 2).slice(0, 5000)}\n\nWrite the following sections:\n\n1. Understanding Your Symptoms\nSummarize the patient's actual complaint.\n\n2. Your Triage Assessment\nExplain the actual severity and reason without modifying them.\n\n3. Recommended Specialist\nExplain the recommended specialty.\n\n4. What Could Be Causing Your Symptoms?\nSummarize plausible possibilities from the specialist assessment.\nDo not present these as diagnoses.\n\n5. Recommended Next Steps\nProvide practical and safe follow-up guidance.\n\n6. When to Seek Urgent Help\nDescribe relevant warning signs.\n\n7. Medical Disclaimer\nState that this is AI-assisted triage, not a diagnosis.\n\nIMPORTANT:\nDo not ask for patient information already provided.\nDo not output JSON, code, placeholders, or template instructions.\nDo not invent PubMed citations.\nKeep the response concise and patient-friendly.\n` }}",
+        "options": {
+          "systemMessage": "You are the Vaidya Clinical Explainability Agent.\n\nYour responsibility is to transform completed clinical triage results, specialist assessments, and available research evidence into a clear, personalized, patient-friendly explanation.\n\nRules:\n- Use the patient information explicitly supplied in the user message.\n- Preserve the deterministic safety severity, score, and reason exactly.\n- Never invent clinical findings, diagnoses, medications, or citations.\n- Explain possible conditions as possibilities, not confirmed diagnoses.\n- Explain why the recommended specialist is appropriate.\n- Give practical, proportionate next steps.\n- Mention urgent warning signs when relevant.\n- Use research evidence only when relevant and verifiable.\n- If evidence is unavailable, omit it rather than inventing references.\n- Never describe your internal architecture, agents, algorithms, or workflow.\n- Never produce empty templates or generic instructions to populate fields.\n- If some details are missing, acknowledge only those specific limitations while using all available information.\n- Do not repeat information unnecessarily.\n\nWrite naturally, clearly, and compassionately for patients."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3360,
+        736
+      ],
+      "id": "40900630-3b03-4c06-9850-e8f13e75be7e",
+      "name": "Explainability Agent"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "triage_records",
+          "mode": "list",
+          "cachedResultName": "triage_records"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "symptoms": "={{ JSON.stringify($('Vaidya Clinical Engine').item.json.symptoms) }}",
+            "age": "={{ Number($('Vaidya Clinical Engine').item.json.age) }}",
+            "duration_days": "={{ Number($('Vaidya Clinical Engine').item.json.duration_days) }}",
+            "severity": "={{ $('Vaidya Clinical Engine').item.json.severity }}",
+            "reason": "={{ $('Vaidya Clinical Engine').item.json.reason }}",
+            "score": "={{ Number($('Vaidya Clinical Engine').item.json.score) }}",
+            "specialist": "={{ $('Vaidya Clinical Engine').item.json.specialist }}",
+            "chief_complaint": "={{ $('When chat message received').item.json.chatInput }}",
+            "narrative_summary": "={{ $json.output }}",
+            "duration_hours": "={{ Number($('Vaidya Clinical Engine').item.json.duration_days) * 24 }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "symptoms",
+              "displayName": "symptoms",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "age",
+              "displayName": "age",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration_days",
+              "displayName": "duration_days",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "specialist",
+              "displayName": "specialist",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "patient_id",
+              "displayName": "patient_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chief_complaint",
+              "displayName": "chief_complaint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "narrative_summary",
+              "displayName": "narrative_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration_hours",
+              "displayName": "duration_hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3712,
+        736
+      ],
+      "id": "fde8bf07-aa79-4805-b6d0-81e369c040c7",
+      "name": "Persist Triage Record",
+      "credentials": {
+        "postgres": {
+          "id": "ohT3IMqS8nQknwbK",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ce955867-dd8e-4b34-8099-d30cc2bd6a86",
+              "leftValue": "={{ $json.severity }}",
+              "rightValue": "EMERGENCY",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1312,
+        544
+      ],
+      "id": "202ab766-8bfe-435a-a665-91dddc37e272",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "message": "=🚨 EMERGENCY ALERT\n\nYour symptoms have triggered an emergency safety assessment.\n\nSeverity: {{ $('MCP Client').item.json.severity }}\n\nReason:\n{{ $('MCP Client').item.json.reason }}\n\nPlease contact your local emergency medical service or proceed immediately to the nearest Emergency Department.\n\nThis is an AI-assisted triage assessment and is not a medical diagnosis.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.2,
+      "position": [
+        1536,
+        448
+      ],
+      "id": "5758cf03-307f-4b9f-af6b-c97faf41f22e",
+      "name": "Emergency Response",
+      "webhookId": "0732feac-bc89-43cc-a8c7-965c43d2d994"
+    },
+    {
+      "parameters": {
+        "message": "={{ `Vaidya Assessment\n\nSeverity: ${$('Vaidya Clinical Engine').item.json.severity}\n\nRecommended Specialist: ${$('Vaidya Clinical Engine').item.json.specialist}\n\n${$('Vaidya Clinical Engine').item.json.reason}\n\nClinical Summary:\n${$('Explainability Agent').item.json.output}\n\nPlease note: This is an AI-assisted triage assessment and is not a medical diagnosis. If your symptoms become severe or you feel you may be experiencing an emergency, seek immediate medical attention.` }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.2,
+      "position": [
+        3936,
+        736
+      ],
+      "id": "b696bcdc-9300-463d-b42a-3b4210fd17ff",
+      "name": "Patient Response",
+      "webhookId": "7bf49cc2-901b-4c10-82c0-fb713edff3a0"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Reception Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reception Agent": {
+      "main": [
+        [
+          {
+            "node": "Vaidya Clinical Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reception Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Cardiology Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Pulmonology Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "General Medicine Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Neurology Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Gastroenterology Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Dermatology Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Evidence Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Explainability Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vaidya Clinical Engine": {
+      "main": [
+        [
+          {
+            "node": "Call 'Vaidya – Safety Triage Agent-2'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Vaidya – Safety Triage Agent-2'": {
+      "main": [
+        [
+          {
+            "node": "MCP Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Specialty Router": {
+      "main": [
+        [
+          {
+            "node": "Specialty Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Specialty Router": {
+      "main": [
+        [
+          {
+            "node": "Cardiology Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pulmonology Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Neurology Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gastroenterology Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dermatology Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "General Medicine Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cardiology Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Gastroenterology Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Neurology Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "General Medicine Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Dermatology Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Pulmonology Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Specialist Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Specialist Results": {
+      "main": [
+        [
+          {
+            "node": "Evidence Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evidence Agent": {
+      "main": [
+        [
+          {
+            "node": "PubMed Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PubMed Search": {
+      "main": [
+        [
+          {
+            "node": "PubMed Evidence Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PubMed Evidence Summary": {
+      "main": [
+        [
+          {
+            "node": "Explainability Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Explainability Agent": {
+      "main": [
+        [
+          {
+            "node": "Persist Triage Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Triage Record": {
+      "main": [
+        [
+          {
+            "node": "Patient Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Emergency Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Specialty Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ca6ac3f9-d988-4f5f-85a8-10f684c0c4b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "050eb919a4abe1da2c8d5ad47590fda2a6477386c92111823cf3a4dd84d9ed77"
+  },
+  "id": "qaSiemBVupsrN4IO",
+  "tags": []
+}

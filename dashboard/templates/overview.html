@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block page_title %}Clinical Executive Overview{% endblock %}
+{% block page_subtitle %}Live metrics, safety severity breakdown, and multi-agent clinical case volume{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- KPI Cards Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <!-- KPI 1: Total Cases -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Analyzed Cases</p>
+                <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ total_cases }}</h3>
+                <span class="text-xs text-emerald-600 font-medium flex items-center mt-1">
+                    <i class="fa-solid fa-arrow-trend-up mr-1"></i> Multi-agent audit pipeline active
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-folder-medical"></i>
+            </div>
+        </div>
+
+        <!-- KPI 2: Emergency Cases -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Emergency Red-Flags</p>
+                <h3 class="text-2xl font-bold text-rose-600 mt-1">{{ emergency_cases }}</h3>
+                <span class="text-xs text-slate-500 mt-1 block">
+                    {{ emergency_pct }}% of all triaged admissions
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-truck-medical"></i>
+            </div>
+        </div>
+
+        <!-- KPI 3: Cases Today -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Admissions Today</p>
+                <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ cases_today }}</h3>
+                <span class="text-xs text-slate-500 mt-1 block">
+                    UTC Clinical Day Cycle
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+        </div>
+
+        <!-- KPI 4: Synthea EHR Patients -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">EHR Cohort (Synthea)</p>
+                <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ total_patients }}</h3>
+                <span class="text-xs text-slate-500 mt-1 block">
+                    Seeded synthetic records
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-users"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Severity Doughnut Chart -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900">Safety Severity Distribution</h3>
+                    <p class="text-xs text-slate-500">Deterministic triage categorization across active cases</p>
+                </div>
+                <span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono">100% Rule Engine</span>
+            </div>
+            <div class="h-64 relative flex items-center justify-center">
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Specialty Distribution Bar Chart -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900">Cases by Clinical Specialty</h3>
+                    <p class="text-xs text-slate-500">Multi-agent specialty routing distribution</p>
+                </div>
+                <span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono">Specialist Pool</span>
+            </div>
+            <div class="h-64 relative flex items-center justify-center">
+                <canvas id="specialtyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Cases Table -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+            <div>
+                <h3 class="text-sm font-bold text-slate-900">Recent Clinical Triage Admissions</h3>
+                <p class="text-xs text-slate-500">Latest cases processed through the autonomous multi-agent pipeline</p>
+            </div>
+            <a href="{{ url_for('dashboard.case_list') }}" class="text-xs text-brand-600 hover:text-brand-700 font-semibold flex items-center">
+                View All Cases <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 uppercase font-semibold border-b border-slate-200">
+                    <tr>
+                        <th class="px-6 py-3">Case ID</th>
+                        <th class="px-6 py-3">Chief Complaint</th>
+                        <th class="px-6 py-3">Severity Level</th>
+                        <th class="px-6 py-3">Specialty</th>
+                        <th class="px-6 py-3">Age / Duration</th>
+                        <th class="px-6 py-3">Timestamp</th>
+                        <th class="px-6 py-3 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for c in recent_cases %}
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="px-6 py-3 font-semibold text-slate-900">#{{ c.id }}</td>
+                        <td class="px-6 py-3 max-w-xs truncate font-medium text-slate-800">
+                            {{ c.chief_complaint or 'Direct Triage Request' }}
+                        </td>
+                        <td class="px-6 py-3">
+                            {% if c.severity == 'EMERGENCY' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse mr-1"></span> EMERGENCY
+                                </span>
+                            {% elif c.severity == 'HIGH' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-orange-100 text-orange-800 border border-orange-300">
+                                    HIGH RISK
+                                </span>
+                            {% elif c.severity == 'MODERATE' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                    MODERATE
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                    LOW RISK
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-3 font-medium text-slate-800">
+                            {{ c.specialist or 'General Medicine' }}
+                        </td>
+                        <td class="px-6 py-3 text-slate-500">
+                            {{ c.age }} yrs • {{ c.duration_days }}d
+                        </td>
+                        <td class="px-6 py-3 text-slate-400">
+                            {{ c.created_at.strftime('%b %d, %H:%M') if c.created_at else 'Recent' }}
+                        </td>
+                        <td class="px-6 py-3 text-right">
+                            <a href="{{ url_for('dashboard.case_detail', case_id=c.id) }}" class="inline-flex items-center px-2.5 py-1 rounded bg-slate-100 hover:bg-brand-50 hover:text-brand-600 font-semibold text-[11px] text-slate-700 transition-colors">
+                                View Detail
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-slate-400">
+                            No cases recorded yet. Run a <a href="{{ url_for('dashboard.intake') }}" class="text-brand-600 font-semibold underline">conversational intake</a> to generate the first case.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Severity Doughnut Chart
+    const ctxSeverity = document.getElementById('severityChart').getContext('2d');
+    new Chart(ctxSeverity, {
+        type: 'doughnut',
+        data: {
+            labels: ['Emergency', 'High Risk', 'Moderate Risk', 'Low Risk'],
+            datasets: [{
+                data: [{{ emergency_cases }}, {{ high_cases }}, {{ moderate_cases }}, {{ low_cases }}],
+                backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#10b981'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { boxWidth: 12, font: { size: 11 } }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // 2. Specialty Bar Chart
+    const specLabels = {{ specialty_counts.keys() | list | tojson }};
+    const specValues = {{ specialty_counts.values() | list | tojson }};
+    const ctxSpecialty = document.getElementById('specialtyChart').getContext('2d');
+    new Chart(ctxSpecialty, {
+        type: 'bar',
+        data: {
+            labels: specLabels.length ? specLabels : ['General Medicine', 'Cardiology', 'Pulmonology', 'Neurology', 'Gastroenterology', 'Dermatology'],
+            datasets: [{
+                label: 'Cases',
+                data: specValues.length ? specValues : [0, 0, 0, 0, 0, 0],
+                backgroundColor: '#0284c7',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

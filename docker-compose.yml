@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vaidya-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vaidya
+      POSTGRES_PASSWORD: vaidya
+      POSTGRES_DB: vaidya
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vaidya -d vaidya"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vaidya-api
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://vaidya:vaidya@postgres:5432/vaidya
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=vaidya
+      - POSTGRES_USER=vaidya
+      - POSTGRES_PASSWORD=vaidya
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=5000
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - SECRET_KEY=${SECRET_KEY:-vaidya-secret-clinical-key-2026}
+      - DASHBOARD_ADMIN_USER=${DASHBOARD_ADMIN_USER:-admin}
+      - DASHBOARD_ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD:-vaidya123}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    command: ["python", "run.py", "--service", "api"]
+
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vaidya-mcp
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://vaidya:vaidya@postgres:5432/vaidya
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=vaidya
+      - POSTGRES_USER=vaidya
+      - POSTGRES_PASSWORD=vaidya
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["python", "run.py", "--service", "mcp"]
+
+volumes:
+  postgres_data:
