@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-10-06T03:46:25.385560+00:00",
+  "mode": "fallback",
+  "repeats": 3,
+  "total_cases": 50,
+  "safety": {
+    "exact_match_accuracy": 0.78,
+    "emergency_recall": 0.9444,
+    "emergency_precision": 0.9444,
+    "emergency_f1": 0.9444,
+    "emergency_tp": 17,
+    "emergency_fn": 1,
+    "emergency_fp": 1,
+    "emergency_tn": 31,
+    "missed_emergencies": [
+      {
+        "id": "case_018",
+        "text": "I am 68 years old and have had pressure in my chest for 3 days.",
+        "expected": "EMERGENCY",
+        "predicted": "LOW",
+        "category": "red_flag",
+        "reason": "Low risk score (7). Routine care recommended."
+      }
+    ],
+    "under_triage_count": 8,
+    "under_triage_rate": 0.16,
+    "over_triage_count": 3,
+    "over_triage_rate": 0.06,
+    "safety_floor_activations": 1,
+    "confusion_matrix": {
+      "EMERGENCY": {
+        "EMERGENCY": 17,
+        "HIGH": 0,
+        "MODERATE": 0,
+        "LOW": 1
+      },
+      "HIGH": {
+        "EMERGENCY": 0,
+        "HIGH": 1,
+        "MODERATE": 3,
+        "LOW": 0
+      },
+      "MODERATE": {
+        "EMERGENCY": 0,
+        "HIGH": 0,
+        "MODERATE": 3,
+        "LOW": 4
+      },
+      "LOW": {
+        "EMERGENCY": 1,
+        "HIGH": 2,
+        "MODERATE": 0,
+        "LOW": 18
+      }
+    }
+  },
+  "routing": {
+    "specialty_top1_accuracy": 0.9,
+    "per_specialty": {
+      "Emergency Medicine": {
+        "precision": 0.9444,
+        "recall": 0.9444,
+        "f1": 0.9444,
+        "support": 18
+      },
+      "General Medicine": {
+        "precision": 0.9,
+        "recall": 0.9,
+        "f1": 0.9,
+        "support": 10
+      },
+      "Cardiology": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.8889,
+        "support": 4
+      },
+      "Pulmonology": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "Neurology": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "support": 6
+      },
+      "Gastroenterology": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1": 0.8,
+        "support": 4
+      },
+      "Gastroenterologist": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "Dermatology": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 4
+      }
+    }
+  },
+  "intake": {
+    "symptom_precision_macro": 0.8867,
+    "symptom_recall_macro": 0.94,
+    "symptom_f1_macro": 0.8987,
+    "age_exact_match_rate": 1.0,
+    "duration_tolerance_match_rate": 0.96,
+    "silent_symptom_default_rate": 0.04,
+    "silent_age_default_rate": 0.0
+  },
+  "robustness": {
+    "fallback_rate": 1.0,
+    "determinism_rate": 1.0
+  },
+  "operational": {
+    "latency_mean_ms": 8.66,
+    "latency_p50_ms": 7.84,
+    "latency_p95_ms": 14.77,
+    "mean_trace_count": 5.3,
+    "mean_citation_count": 1.28,
+    "citation_presence_rate": 1.0
+  }
+}

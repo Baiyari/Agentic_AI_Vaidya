@@ -1,0 +1,506 @@
+[
+  {
+    "id": "case_001",
+    "text": "I am 35 years old and I have severe bleeding from a deep arm laceration that won't stop since 20 minutes ago.",
+    "expected_symptoms": ["severe_bleeding"],
+    "expected_age": 35,
+    "expected_duration_days": 0.014,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_002",
+    "text": "I am 42 years old and have high pitched stridor and trouble getting air in for the past hour.",
+    "expected_symptoms": ["stridor", "difficulty_breathing"],
+    "expected_age": 42,
+    "expected_duration_days": 0.042,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_003",
+    "text": "I am 58 years old and I started coughing blood this morning.",
+    "expected_symptoms": ["coughing_blood"],
+    "expected_age": 58,
+    "expected_duration_days": 0.25,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_004",
+    "text": "I am 29 years old and had multiple recurrent seizures over the last two hours.",
+    "expected_symptoms": ["seizures"],
+    "expected_age": 29,
+    "expected_duration_days": 0.083,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_005",
+    "text": "I am 64 years old and suddenly developed slurred speech and facial drooping 30 minutes ago.",
+    "expected_symptoms": ["slurred_speech", "facial_drooping"],
+    "expected_age": 64,
+    "expected_duration_days": 0.021,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_006",
+    "text": "I am 70 years old and woke up with weakness on one side of my body and sudden numbness in my right arm.",
+    "expected_symptoms": ["weakness_one_side", "sudden_numbness"],
+    "expected_age": 70,
+    "expected_duration_days": 0.25,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_007",
+    "text": "I am 23 years old and experiencing overwhelming despair and active suicidal thoughts today.",
+    "expected_symptoms": ["suicidal_thoughts"],
+    "expected_age": 23,
+    "expected_duration_days": 0.25,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_008",
+    "text": "I am 52 years old and had a sudden loss of consciousness and passed out at work 2 hours ago.",
+    "expected_symptoms": ["syncope"],
+    "expected_age": 52,
+    "expected_duration_days": 0.083,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_009",
+    "text": "I am 61 years old and have had crushing chest pain and shortness of breath for two hours.",
+    "expected_symptoms": ["chest_pain", "shortness_of_breath"],
+    "expected_age": 61,
+    "expected_duration_days": 0.083,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_010",
+    "text": "I am 48 years old and experiencing severe chest pain and difficulty breathing since this morning.",
+    "expected_symptoms": ["chest_pain", "difficulty_breathing"],
+    "expected_age": 48,
+    "expected_duration_days": 0.25,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_011",
+    "text": "I am 45 years old and have a sudden severe headache and vision loss in my left eye since 1 hour ago.",
+    "expected_symptoms": ["sudden_severe_headache", "vision_loss"],
+    "expected_age": 45,
+    "expected_duration_days": 0.042,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_012",
+    "text": "I am 31 years old and have severe difficulty breathing with face swelling after eating peanuts half an hour ago.",
+    "expected_symptoms": ["difficulty_breathing", "swelling_face"],
+    "expected_age": 31,
+    "expected_duration_days": 0.021,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_013",
+    "text": "I am 22 years old and have a high fever, stiff neck, and confusion since yesterday.",
+    "expected_symptoms": ["fever", "stiff_neck", "confusion"],
+    "expected_age": 22,
+    "expected_duration_days": 1.0,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_014",
+    "text": "I am 28 years old with acute high fever and stiff neck for 1 day.",
+    "expected_symptoms": ["fever", "stiff_neck"],
+    "expected_age": 28,
+    "expected_duration_days": 1.0,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_015",
+    "text": "I am 56 years old and have chest pain and dizziness since 3 hours ago.",
+    "expected_symptoms": ["chest_pain", "dizziness"],
+    "expected_age": 56,
+    "expected_duration_days": 0.125,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_016",
+    "text": "I am 60 years old and have had chest pain for two hours.",
+    "expected_symptoms": ["chest_pain"],
+    "expected_age": 60,
+    "expected_duration_days": 0.083,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_017",
+    "text": "I am 25 years old and have had sharp chest pain for 1 hour.",
+    "expected_symptoms": ["chest_pain"],
+    "expected_age": 25,
+    "expected_duration_days": 0.042,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_018",
+    "text": "I am 68 years old and have had pressure in my chest for 3 days.",
+    "expected_symptoms": ["chest_pain"],
+    "expected_age": 68,
+    "expected_duration_days": 3.0,
+    "expected_severity": "EMERGENCY",
+    "expected_specialty": "Emergency Medicine",
+    "category": "red_flag"
+  },
+  {
+    "id": "case_019",
+    "text": "I am 34 years old and have had palpitations and a racing heart intermittently for 3 days.",
+    "expected_symptoms": ["palpitations"],
+    "expected_age": 34,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Cardiology",
+    "category": "routine"
+  },
+  {
+    "id": "case_020",
+    "text": "I am 45 years old and have noticed brief heart palpitations when resting for 5 days.",
+    "expected_symptoms": ["palpitations"],
+    "expected_age": 45,
+    "expected_duration_days": 5.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Cardiology",
+    "category": "routine"
+  },
+  {
+    "id": "case_021",
+    "text": "I am 29 years old and have occasional heart palpitations after drinking coffee for 2 weeks.",
+    "expected_symptoms": ["palpitations"],
+    "expected_age": 29,
+    "expected_duration_days": 14.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "Cardiology",
+    "category": "routine"
+  },
+  {
+    "id": "case_022",
+    "text": "I am 53 years old and have felt intermittent palpitations and mild fatigue for 3 weeks.",
+    "expected_symptoms": ["palpitations", "fatigue"],
+    "expected_age": 53,
+    "expected_duration_days": 21.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "Cardiology",
+    "category": "multi_symptom"
+  },
+  {
+    "id": "case_023",
+    "text": "I am 38 years old and have had wheezing and chest tightness when breathing for 3 days.",
+    "expected_symptoms": ["wheezing"],
+    "expected_age": 38,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Pulmonology",
+    "category": "routine"
+  },
+  {
+    "id": "case_024",
+    "text": "I am 49 years old and have had a dry cough and wheezing for 4 days.",
+    "expected_symptoms": ["cough", "wheezing"],
+    "expected_age": 49,
+    "expected_duration_days": 4.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Pulmonology",
+    "category": "routine"
+  },
+  {
+    "id": "case_025",
+    "text": "I am 62 years old and have had a persistent chronic cough for 3 weeks.",
+    "expected_symptoms": ["cough"],
+    "expected_age": 62,
+    "expected_duration_days": 21.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "General Medicine",
+    "category": "routine"
+  },
+  {
+    "id": "case_026",
+    "text": "I am 41 years old and have mild shortness of breath when climbing stairs for 5 days.",
+    "expected_symptoms": ["shortness_of_breath"],
+    "expected_age": 41,
+    "expected_duration_days": 5.0,
+    "expected_severity": "HIGH",
+    "expected_specialty": "Pulmonology",
+    "category": "routine"
+  },
+  {
+    "id": "case_027",
+    "text": "I am 54 years old and have had mild headache for two days.",
+    "expected_symptoms": ["headache"],
+    "expected_age": 54,
+    "expected_duration_days": 2.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Neurology",
+    "category": "routine"
+  },
+  {
+    "id": "case_028",
+    "text": "I am 32 years old and have had a throbbing migraine for 1 day.",
+    "expected_symptoms": ["migraine"],
+    "expected_age": 32,
+    "expected_duration_days": 1.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Neurology",
+    "category": "routine"
+  },
+  {
+    "id": "case_029",
+    "text": "I am 46 years old and have felt dizziness and lightheadedness for 3 days.",
+    "expected_symptoms": ["dizziness"],
+    "expected_age": 46,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Neurology",
+    "category": "routine"
+  },
+  {
+    "id": "case_030",
+    "text": "I am 63 years old and have had a mild tremor in my hands for 2 weeks.",
+    "expected_symptoms": ["tremor"],
+    "expected_age": 63,
+    "expected_duration_days": 14.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "Neurology",
+    "category": "routine"
+  },
+  {
+    "id": "case_031",
+    "text": "I am 39 years old and have had vertigo and mild nausea for 3 days.",
+    "expected_symptoms": ["vertigo", "nausea"],
+    "expected_age": 39,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Neurology",
+    "category": "multi_symptom"
+  },
+  {
+    "id": "case_032",
+    "text": "I am 27 years old and have felt mild nausea for 1 day after eating.",
+    "expected_symptoms": ["nausea"],
+    "expected_age": 27,
+    "expected_duration_days": 1.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Gastroenterologist",
+    "category": "routine"
+  },
+  {
+    "id": "case_033",
+    "text": "I am 33 years old and have had vomiting and nausea for 2 days.",
+    "expected_symptoms": ["vomiting", "nausea"],
+    "expected_age": 33,
+    "expected_duration_days": 2.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Gastroenterology",
+    "category": "routine"
+  },
+  {
+    "id": "case_034",
+    "text": "I am 44 years old and have had crampy abdominal pain and bloating for 3 days.",
+    "expected_symptoms": ["abdominal_pain"],
+    "expected_age": 44,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Gastroenterology",
+    "category": "routine"
+  },
+  {
+    "id": "case_035",
+    "text": "I am 51 years old and have had diarrhea and stomach pain for 4 days.",
+    "expected_symptoms": ["diarrhea", "abdominal_pain"],
+    "expected_age": 51,
+    "expected_duration_days": 4.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Gastroenterology",
+    "category": "routine"
+  },
+  {
+    "id": "case_036",
+    "text": "I am 59 years old and noticed yellowish skin jaundice and dark urine for 1 week.",
+    "expected_symptoms": ["jaundice"],
+    "expected_age": 59,
+    "expected_duration_days": 7.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Gastroenterology",
+    "category": "routine"
+  },
+  {
+    "id": "case_037",
+    "text": "I am 26 years old and have had an itchy red skin rash on both arms for 5 days.",
+    "expected_symptoms": ["skin_rash", "itching"],
+    "expected_age": 26,
+    "expected_duration_days": 5.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Dermatology",
+    "category": "routine"
+  },
+  {
+    "id": "case_038",
+    "text": "I am 36 years old and developed hives and intense itching on my torso for 2 days.",
+    "expected_symptoms": ["hives", "itching"],
+    "expected_age": 36,
+    "expected_duration_days": 2.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Dermatology",
+    "category": "routine"
+  },
+  {
+    "id": "case_039",
+    "text": "I am 40 years old and have an itchy eczema patch on my elbow for 3 weeks.",
+    "expected_symptoms": ["eczema", "itching"],
+    "expected_age": 40,
+    "expected_duration_days": 21.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "Dermatology",
+    "category": "routine"
+  },
+  {
+    "id": "case_040",
+    "text": "I am 24 years old and have had severe itching and localized skin rash for 1 week.",
+    "expected_symptoms": ["itching", "skin_rash"],
+    "expected_age": 24,
+    "expected_duration_days": 7.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Dermatology",
+    "category": "routine"
+  },
+  {
+    "id": "case_041",
+    "text": "I am 37 years old and have had a low-grade fever and mild fatigue for 2 days.",
+    "expected_symptoms": ["fever", "fatigue"],
+    "expected_age": 37,
+    "expected_duration_days": 2.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "General Medicine",
+    "category": "routine"
+  },
+  {
+    "id": "case_042",
+    "text": "I am 72 years old and have been experiencing general fatigue and tiredness for 3 weeks.",
+    "expected_symptoms": ["fatigue"],
+    "expected_age": 72,
+    "expected_duration_days": 21.0,
+    "expected_severity": "HIGH",
+    "expected_specialty": "General Medicine",
+    "category": "edge_case"
+  },
+  {
+    "id": "case_043",
+    "text": "I am 1 year old child and have had a fever and mild cough for 2 days.",
+    "expected_symptoms": ["fever", "cough"],
+    "expected_age": 1,
+    "expected_duration_days": 2.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "General Medicine",
+    "category": "edge_case"
+  },
+  {
+    "id": "case_044",
+    "text": "I am 66 years old and have had dull knee pain and joint pain for 1 month.",
+    "expected_symptoms": ["knee_pain", "joint_pain"],
+    "expected_age": 66,
+    "expected_duration_days": 30.0,
+    "expected_severity": "HIGH",
+    "expected_specialty": "General Medicine",
+    "category": "edge_case"
+  },
+  {
+    "id": "case_045",
+    "text": "I am 47 years old and have joint pain and morning stiffness in both hands for 3 weeks.",
+    "expected_symptoms": ["joint_pain", "morning_stiffness"],
+    "expected_age": 47,
+    "expected_duration_days": 21.0,
+    "expected_severity": "MODERATE",
+    "expected_specialty": "General Medicine",
+    "category": "routine"
+  },
+  {
+    "id": "case_046",
+    "text": "I do not have any chest pain or breathing issues, but I have had a mild runny cough for 3 days.",
+    "expected_symptoms": ["cough"],
+    "expected_age": 40,
+    "expected_duration_days": 3.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "General Medicine",
+    "category": "negation",
+    "label_confidence": "low"
+  },
+  {
+    "id": "case_047",
+    "text": "My mother had a severe stroke last week, but I am 30 years old and just have a mild headache since yesterday.",
+    "expected_symptoms": ["headache"],
+    "expected_age": 30,
+    "expected_duration_days": 1.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "Neurology",
+    "category": "ambiguous",
+    "label_confidence": "low"
+  },
+  {
+    "id": "case_048",
+    "text": "I am 50 years old and have severe fevr and couhg for 2 days.",
+    "expected_symptoms": ["fever", "cough"],
+    "expected_age": 50,
+    "expected_duration_days": 2.0,
+    "expected_severity": "LOW",
+    "expected_specialty": "General Medicine",
+    "category": "typo",
+    "label_confidence": "low"
+  },
+  {
+    "id": "case_049",
+    "text": "I feel generally unwell, malaise, and rundown since this morning without specific focal pain.",
+    "expected_symptoms": ["fever"],
+    "expected_age": 40,
+    "expected_duration_days": 0.25,
+    "expected_severity": "LOW",
+    "expected_specialty": "General Medicine",
+    "category": "ambiguous",
+    "label_confidence": "low"
+  },
+  {
+    "id": "case_050",
+    "text": "I am 21 years old and have multiple symptoms: headache, nausea, joint pain, fatigue, and slight cough for 4 days.",
+    "expected_symptoms": ["headache", "nausea", "joint_pain", "fatigue", "cough"],
+    "expected_age": 21,
+    "expected_duration_days": 4.0,
+    "expected_severity": "HIGH",
+    "expected_specialty": "General Medicine",
+    "category": "multi_symptom"
+  }
+]

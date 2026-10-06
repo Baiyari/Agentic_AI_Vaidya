@@ -1,0 +1,5 @@
+# Optional dependencies for evaluation metrics and charting
+# Standard library csv/json is used if these are not installed.
+pandas>=2.0.0
+matplotlib>=3.7.0
+pytest>=7.4.3
